@@ -18,5 +18,5 @@ while (not correctInput):
 
 people = input("How many pople to split the bill? ")
 
-total = round(float(bill) / float(people) * (float(tipPerc) * 0.01 + 1) , 2)
-print(f"Each person should pay: ${total} ")
+totalPerPerson = round(float(bill) / float(people) * (float(tipPerc) * 0.01 + 1) , 2)
+print("Each person should pay : $%.2f" %totalPerPerson) 
