@@ -1,3 +1,4 @@
+#This is a variation, if they player busts, the dealer doesn't have to draw to 17
 from random import randint as rand
 
 cards = ["2","3","4","5","6","7","8","9","10","J","Q","K","A"]
@@ -65,7 +66,6 @@ def player_turn():
 			global hand_is_over
 			hand_is_over = True
 			break
-
 
 def draw_card(hand):
 	card = cards[rand(0,len(cards)-1)]
