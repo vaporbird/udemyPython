@@ -1,4 +1,3 @@
-#This is a variation, if they player busts, the dealer doesn't have to draw to 17
 from random import randint as rand
 
 cards = ["2","3","4","5","6","7","8","9","10","J","Q","K","A"]
@@ -20,13 +19,10 @@ values = {
 
 player_hand = []
 cpu_hand = []
-hand_is_over = False
 play_again = True
 def start_new_game():
 	player_hand.clear()
 	cpu_hand.clear()
-	global hand_is_over
-	hand_is_over = False
 
 def generate_starting_hands():
 	for i in range(2):
@@ -63,8 +59,7 @@ def player_turn():
 		print(f"\nYour hand is {player_hand}")
 		print(f"Your score is {check_score(player_hand)} ")	
 		if check_score(player_hand) > 21:
-			global hand_is_over
-			hand_is_over = True
+			print("Player Bust!")
 			break
 
 def draw_card(hand):
@@ -78,16 +73,24 @@ def cpu_turn():
 		draw_card(cpu_hand)
 		score = check_score(cpu_hand)
 	if score > 21:
-		global hand_is_over
-		hand_is_over = True
+		print("CPU Bust!")
 	print(f"\nThe CPU hand is : {cpu_hand} ")
 	print(f"CPU score is : {score}")
 
 def who_is_winner():
-	winner = check_score(player_hand) - check_score(cpu_hand)
-	if winner > 0:
+	player = check_score(player_hand)
+	cpu = check_score(cpu_hand)
+	if player > 21 and cpu > 21:
+		return 0
+	if player > 21:
+		return -1
+	if cpu > 21:
 		return 1
-	if winner < 0:
+
+	#no bust section	
+	if player - cpu > 0:
+		return 1
+	if player - cpu < 0:
 		return -1
 	return 0
 
@@ -105,16 +108,8 @@ while(play_again):
 	start_new_game()
 	
 	generate_starting_hands()
-	player_turn()
-	if (hand_is_over):
-		print("Player loses! ")
-		play_again = do_play_another()
-		continue
+	player_turn()	
 	cpu_turn()
-	if (hand_is_over):
-		print("Player wins!" )
-		play_again = do_play_another()
-		continue
 
 	if who_is_winner() == 1:
 		print ("Player Wins! ")
