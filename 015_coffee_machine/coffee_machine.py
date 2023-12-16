@@ -3,16 +3,23 @@ from info import MENU as menu, resources, profit
 def print_status():
 	for r in resources:
 		print(f"{r} : {resources[r]}")
-	print(f"profit : {profit}")
+	print(f"profit : {round(profit['profit'], 2)}")
 
 def insert_coins():
-	#lazy to do error handling today, if they put negative numbers or strings so be it
 	total = 0.0
 	print("Please insert coins!")
-	total += int(input("How many Pennies would you like to insert? : ")) * 0.01
-	total += int(input("How many Nickels would you like to insert? : ")) * 0.05
-	total += int(input("How many Dimes would you like to insert? : ")) * 0.10
-	total += int(input("How many Quarters would you like to insert? : ")) * 0.25
+	is_input_correct = False
+	while not is_input_correct:
+		try :
+			total += abs(int(input("How many Pennies would you like to insert? : ")) * 0.01)
+			total += abs(int(input("How many Nickels would you like to insert? : ")) * 0.05)
+			total += abs(int(input("How many Dimes would you like to insert? : ")) * 0.10)
+			total += abs(int(input("How many Quarters would you like to insert? : ")) * 0.25)
+		except Exception :
+			total = 0.0
+			print("Invalid input, please try again!")
+			continue
+		is_input_correct = True
 	return total
 
 def reduce_resources(drink):
@@ -74,16 +81,18 @@ def are_funds_enough (drink, money):
 
 def return_change(drink, money):
 	if(drink == "abort"):
-		print(f"Not enough funds, refunding {money}")
+		print(f"Not enough funds, refunding {round(money, 2)}")
 		return money
 	change = money - menu[drink]["cost"]
-	print(f"Your change is: {change} ")
+	print(f"Your change is: {round(change,2)} ")
 	return change
 
 def ask_for_drink():
 	
 	print(profit["profit"])
 	drink = input("What would you like? (Espresso/Latte/Cappuccino) ").strip().lower()
+	while drink not in ['espresso', 'latte', 'cappuccino','status']:
+		drink = input("Please enter a valid input? (Espresso/Latte/Cappuccino) ").strip().lower()
 	if drink == "status":
 		print_status()
 		return
@@ -97,10 +106,14 @@ def ask_for_drink():
 	return_change(drink, credit)
 	reduce_resources(drink)
 	print("Please take your drink :)")
+	#for some reason if profit is just primitive variable (not in a dictionary), it can't be found because of scope???? why does it work with list instead????
 	profit["profit"] += menu[drink]["cost"]
 
 is_over = False
 while(not is_over):
 	ask_for_drink()
-	if input("Do you want to order again? (Y/n) : ").strip().upper() == 'N':
+	answer = input("Would you like to order again ? (Y/n) : ").strip().upper()
+	while answer not in ["Y","N"]: 
+		answer = input("Would you like to order again ? (Y/n) : ").strip().upper()
+	if answer == "N":
 		is_over = True
