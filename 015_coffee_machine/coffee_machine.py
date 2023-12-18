@@ -91,8 +91,10 @@ def ask_for_drink():
 	
 	print(profit["profit"])
 	drink = input("What would you like? (Espresso/Latte/Cappuccino) ").strip().lower()
-	while drink not in ['espresso', 'latte', 'cappuccino','status']:
+	while drink not in ['espresso', 'latte', 'cappuccino','status', 'off']:
 		drink = input("Please enter a valid input? (Espresso/Latte/Cappuccino) ").strip().lower()
+	if drink == "off":
+		exit(0)
 	if drink == "status":
 		print_status()
 		return
