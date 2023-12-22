@@ -5,6 +5,7 @@ class Snake():
 	def __init__(self, screen):
 		self.s = screen
 		self.snake_body = []
+
 		for i in range (3):
 			t = Turtle()
 			self.snake_body.append(t)
@@ -16,6 +17,8 @@ class Snake():
 			t.speed(1)
 		upd_scr(self.s)
 
+		self.head = self.snake_body[0]
+		self.tail = self.snake_body[len(self.snake_body) - 1]
 
 	def automove(self):
 		for i in range (len(self.snake_body) - 1, 0, -1):
