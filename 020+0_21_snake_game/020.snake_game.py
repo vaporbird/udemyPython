@@ -3,6 +3,7 @@ from turtle import Turtle,Screen
 from snake import Snake, upd_scr
 from functions import upd_scr
 from food import Food
+from scoreboard import Scoreboard
 
 screen = Screen()
 screen.setup(width = 600, height = 600)
@@ -20,13 +21,17 @@ screen.onkeypress(snake.left,"a")
 screen.onkeypress(snake.right,"d")
 
 game_is_on = True
+score = 0
+scoreboard = Scoreboard(screen, 0)
 while game_is_on:
 	snake.automove()
 
 	#Detect collision with food
 	if snake.head.distance(food) < 10:
+		scoreboard.update()
 		food.refresh()
 		collision = True
+
 		while collision:
 			for part in snake.snake_body:
 				if part.distance(food) == 0:
