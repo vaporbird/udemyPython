@@ -1,5 +1,5 @@
 import turtle
-from turtle import Turtle,Screen
+from turtle import Turtle, Screen, TK
 from snake import Snake, upd_scr
 from functions import upd_scr
 from food import Food
@@ -27,16 +27,33 @@ while game_is_on:
 	snake.automove()
 
 	#Detect collision with food
-	if snake.head.distance(food) < 10:
+	if snake.head.distance(food) < 15:
 		scoreboard.update()
 		food.refresh()
+		snake.expand()
 		collision = True
 
 		while collision:
+			collision = False
 			for part in snake.snake_body:
-				if part.distance(food) == 0:
+				if part.distance(food) < 15:
+					collision = True
 					food.refresh()
 					break
-			collision = False
+
+	#Detect collision with wall
+	if abs(snake.head.xcor()) >= screen.window_width()/2 or abs(snake.head.ycor()) >= screen.window_height()/2:
+		print("You lost")
+		#TK.messagebox.showinfo(title="Game Over!", message= f"You hit a wall!\nYour finals score is: {scoreboard.score}")
+		scoreboard.game_over()
+		game_is_on = False
+
+	#Detect collision with body	
+	for segment in snake.snake_body[1::]:
+		if segment.distance(snake.head.pos()) < 15:
+			print("You lost")
+			#TK.messagebox.showinfo(title="Game Over!", message= f"You bit yourself!\nYour finals score is: {scoreboard.score}")
+			scoreboard.game_over()
+			game_is_on = False
 
 screen.exitonclick()

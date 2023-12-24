@@ -42,5 +42,8 @@ class Snake():
 		if self.snake_body[0].heading() == 90 or self.snake_body[0].heading() == 270:
 			self.snake_body[0].setheading(0)
 
-
-	
+	def expand(self):
+		last_seg = self.snake_body[len(self.snake_body) - 1]
+		new_seg = last_seg.clone()
+		self.snake_body.append(new_seg)
+		
