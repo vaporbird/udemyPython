@@ -10,7 +10,7 @@ class FlightSearch:
     def __init__(self):
         pass
 
-    def get_cheapest_price(self, start:str, end:str, fly_from:str, fly_to:str):
+    def get_cheapest_price(self, min_price:int, start:str, end:str, fly_from:str, fly_to:str):
         headers = {
             "apikey" : KIWI_KEY,
         }
@@ -24,18 +24,18 @@ class FlightSearch:
         req = requests.get(url = KIWI_URL, params = prompt, headers = headers)
         req.raise_for_status()
         flights = req.json()["data"]
-        try:
-            cheapest = flights[0]["price"]
-        except IndexError:
-            return 0
-        else:
-            for flight in flights[1:]:
-                if (flight["price"] < cheapest):
-                    cheapest = flight["price"]  
+        cheapest = {}
+        cheapest["price"] = min_price
+        for flight in flights:
+            if (flight["price"] < cheapest["price"]):
+                 cheapest = flight
 
-            return cheapest
+            if min_price != cheapest["price"]:
+                return cheapest
+            else:
+                return {}
+    
 
-
-test = FlightSearch()
-lis = test.get_cheapest_price("22/01/2024","22/01/2024","LIS","PLD")
-print(lis)
+#test = FlightSearch()
+#lis = test.get_cheapest_price("22/01/2024","28/01/2024","SOF","LIS")
+#print(lis)

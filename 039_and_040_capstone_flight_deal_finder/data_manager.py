@@ -18,21 +18,65 @@ class DataManager:
 
     def get_data(self):
         return self.data
+
+    def get_city_iatas(self):
+        cities = {}
+        for city in self.data["prices"]:
+            cities[city["city"]] = city["iataCode"]
+
+        return cities
+
+    def get_flight_min_prices(self):
+        cities = {}
+        for city in self.data["prices"]:
+            cities[city["city"]] = city["lowestPrice"]
+
+        return cities
+
+    def get_row_index_of_a_city(self, city:str):
+        counter = 2
+        for d in self.data["prices"]:
+            if city.lower().strip() == d["city"].lower().strip():
+                return counter
+            else:
+                counter += 1
+        raise KeyError("No such city!") 
+
     
-    def updade_row_price(self, row_name:str, row_value:int):
+    def updade_row_price(self, city_name:str, flight_price:int):
+        city = city_name.capitalize()
         prompt = {
             "price" : {
-                "city" : row_name.capitalize(),
-                "lowestPrice" : row_value,
+                "city" : city,
+                "lowestPrice" : flight_price,
             } 
         }
         try:
-            req = requests.put(url = SHEETY_URL + "/2", json = prompt)
+            req = requests.put(url = SHEETY_URL + "/" + str(self.get_row_index_of_a_city(city)), json = prompt)
             req.raise_for_status()
         except requests.exceptions.HTTPError as err:
             SystemExit(err)
         else:
             return True
 
+    def set_iata(self, city:str, iata:str):
+        city = city_name.capitalize()
+        prompt = {
+            "price" : {
+                "city" : city(),
+                "iataCode" : iata,
+            } 
+        }
+        try:
+            req = requests.put(url = SHEETY_URL + "/" + str(self.get_row_index_of_a_city), json = prompt)
+            req.raise_for_status()
+        except requests.exceptions.HTTPError as err:
+            SystemExit(err)
+        else:
+            return True
+
+
 #test = DataManager()
-#test.updade_row_price("paris",54)
+#asd = test.get_row_index_of_a_city("Berlin")
+#print(asd)
+#test.set_iata("paris",545)
