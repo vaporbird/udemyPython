@@ -1,4 +1,4 @@
-from  data_manager import DataManager
+from data_manager import DataManager
 from flight_search import FlightSearch
 from notification_manager import NotificationManager
 import datetime
@@ -18,8 +18,8 @@ today = now.strftime("%d/%m/%Y")
 next_6_m = now_plus_six.strftime("%d/%m/%Y")
 
 for destination in destinations:    
-    print (destinations[destination])
-    loc = fs.get_cheapest_price(cheapest_prices[destination] , today, next_6_m, "SOF", destinations[destination])
+    print(destinations[destination])
+    loc = fs.get_cheapest_price(cheapest_prices[destination], today, next_6_m, "SOF", destinations[destination])
     if (loc):
-        #nm.send_sms(loc)
+        # nm.send_sms(loc)
         dm.updade_row_price(destination, loc["price"])
